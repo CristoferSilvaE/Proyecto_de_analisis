@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Escáner ATS | Canvia ATS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* Mismos estilos base del Sidebar y Layout */
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Layout Principal */
+        .wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Sidebar Fijo */
+        .sidebar {
+            width: 260px;
+            background-color: #1a2235;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+            flex-grow: 1;
+        }
+
+        .menu-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            letter-spacing: 1px;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: #2563eb;
+            color: white;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border: 2px solid white;
+            margin-left: -10px;
+        }
+
+        /* Content Area */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background: white;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box input {
+            border: none;
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 0.4rem 1rem;
+            width: 300px;
+            font-size: 0.85rem;
+        }
+
+        /* Estilos propios del Escáner */
+        .ats-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-ats {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-ats:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- El mismo Sidebar, pero ahora "Escáner ATS" está activo -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h4 class="mb-0 fs-5 fw-bold"><span
+                        class="bg-primary text-white rounded px-2 py-1 me-2 d-inline-block">C</span> Canvia ATS</h4>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-title">Operaciones TI</div>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+
+                <!-- Enlaces preparados para futuros módulos -->
+                <a th:href="@{/reclutador/vacantes}" class="menu-item"><i class="bi bi-briefcase"></i> Vacantes
+                    Activas</a>
+                <a th:href="@{/reclutador/candidatos}" class="menu-item"><i class="bi bi-people"></i> Base de
+                    Candidatos</a>
+
+                <a th:href="@{/reclutador/escaner}" class="menu-item"><i class="bi bi-upc-scan"></i> Escáner ATS &
+                    Scoring</a>
+
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-camera-video"></i> Entrevistas
+                    Técnicas</a>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-sliders"></i> Configuración</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="d-flex align-items-center">
+                    <div class="avatar ms-0 me-2" style="background:#4f46e5;">MR</div>
+                    <div>
+                        <div class="small fw-bold lh-1">Mariana Rios</div>
+                        <div class="text-start opacity-75" style="font-size:0.7rem;">Sr Tech Recruiter</div>
+                    </div>
+                </div>
+                <!-- Enlace de cerrar sesión (Thymeleaf) de la primera imagen, envolviendo el icono de la segunda -->
+                <a th:href="@{/login}" class="text-start opacity-75">
+                    <i class="bi bi-box-arrow-right fs-5 cursor-pointer"></i>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <h5 class="mb-0 fw-bold">Módulo de IA y Parsing Semántico</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-bell fs-5 text-muted"></i>
+                    <div class="fw-bold small">Mariana Rios</div>
+                </div>
+            </header>
+
+            <div class="p-4">
+                <!-- Alertas de éxito o error tras evaluar -->
+                <div th:if="${param.exito}" class="alert alert-success bg-success text-white border-0 fw-bold">
+                    <i class="bi bi-check-circle-fill me-2"></i> Evaluación completada. Los CVs han sido escaneados y el
+                    Score calculado.
+                </div>
+
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Candidatos en Cola de Análisis</h2>
+                        <p class="text-muted small mb-0">Esta lista muestra los currículums recibidos (PDF) listos para
+                            que el motor ATS extraiga las palabras clave y asigne un Score.</p>
+                    </div>
+                </div>
+
+                <div class="ats-card p-0">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small">
+                            <tr>
+                                <th class="ps-4 py-3">CANDIDATO</th>
+                                <th>VACANTE POSTULADA</th>
+                                <th>FECHA RECEPCIÓN</th>
+                                <th>ESTADO ATS</th>
+                                <th class="text-end pe-4">ACCIÓN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="postulacion : ${postulaciones}">
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark"
+                                        th:text="${postulacion.candidato.nombres} + ' ' + ${postulacion.candidato.apellidos}">
+                                        Nombre Candidato</div>
+                                    <div class="text-muted small" th:text="${postulacion.candidato.correo}">
+                                        correo@test.com</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-primary small" th:text="${postulacion.vacante.titulo}">
+                                        Vacante</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">ID:
+                                        CNV-[[${postulacion.vacante.idVacante}]]</div>
+                                </td>
+                                <td class="small text-muted"
+                                    th:text="${#temporals.format(postulacion.fechaPostulacion, 'dd/MM/yyyy HH:mm')}">
+                                    Fecha</td>
+                                <td>
+                                    <span class="badge px-3 py-2 rounded-pill"
+                                        th:classappend="${postulacion.estado.nombre == 'RECIBIDA'} ? 'bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25' : 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25'"
+                                        th:text="${postulacion.estado.nombre}">
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <!-- Botón mágico que dispara Apache PDFBox -->
+                                    <form th:if="${postulacion.estado.nombre == 'RECIBIDA'}"
+                                        th:action="@{/reclutador/evaluar/{id}(id=${postulacion.idPostulacion})}"
+                                        method="post" class="m-0">
+                                        <button type="submit" class="btn btn-ats rounded-pill">
+                                            <i class="bi bi-cpu me-2"></i>Ejecutar ATS
+                                        </button>
+                                    </form>
+
+                                    <button th:unless="${postulacion.estado.nombre == 'RECIBIDA'}"
+                                        class="btn btn-outline-success btn-sm rounded-pill fw-bold" disabled>
+                                        <i class="bi bi-check2-all me-1"></i> Evaluado
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(postulaciones)}">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i> No hay currículums pendientes de
+                                    evaluación ATS.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script para efecto de carga en el botón del Escáner -->
+    <script>
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) {
+                    // Cambia el estado del botón a "Cargando..."
+                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Analizando CV...';
+                    btn.classList.add('disabled'); // Deshabilita para evitar doble clic
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

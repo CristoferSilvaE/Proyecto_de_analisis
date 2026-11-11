@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Recruiter Hub | Canvia ATS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Layout Principal */
+        .wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Sidebar Fijo */
+        .sidebar {
+            width: 260px;
+            background-color: #1a2235;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+            flex-grow: 1;
+        }
+
+        .menu-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            letter-spacing: 1px;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: #2563eb;
+            color: white;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Content Area */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background: white;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box input {
+            border: none;
+            background: #f3f4f6;
+            border-radius: 6px;
+            padding: 0.4rem 1rem;
+            width: 300px;
+            font-size: 0.85rem;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0.5rem 0;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            color: #3b82f6;
+        }
+
+        /* Table Area */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        /* Tags & Badges */
+        .badge-urgente {
+            background-color: #fee2e2;
+            color: #ef4444;
+            border: 1px solid #fca5a5;
+            font-size: 0.7rem;
+        }
+
+        .avatar-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border: 2px solid white;
+            margin-left: -10px;
+        }
+
+        /* Right Panel Cards */
+        .side-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- SIDEBAR FIJO -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h4 class="mb-0 fs-5 fw-bold"><span
+                        class="bg-primary text-white rounded px-2 py-1 me-2 d-inline-block">C</span> Canvia ATS</h4>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-title">Operaciones TI</div>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+
+                <!-- Enlaces preparados para futuros módulos -->
+                <a th:href="@{/reclutador/vacantes}" class="menu-item"><i class="bi bi-briefcase"></i> Vacantes
+                    Activas</a>
+                <a th:href="@{/reclutador/candidatos}" class="menu-item"><i class="bi bi-people"></i> Base de
+                    Candidatos</a>
+
+                <a th:href="@{/reclutador/escaner}" class="menu-item"><i class="bi bi-upc-scan"></i> Escáner ATS &
+                    Scoring</a>
+
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-camera-video"></i> Entrevistas
+                    Técnicas</a>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-sliders"></i> Configuración</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="d-flex align-items-center">
+                    <div class="avatar ms-0 me-2" style="background:#4f46e5;">MR</div>
+                    <div>
+                        <div class="small fw-bold lh-1">Mariana Rios</div>
+                        <div class="text-start opacity-75" style="font-size:0.7rem;">Sr Tech Recruiter</div>
+                    </div>
+                </div>
+                <!-- Enlace de cerrar sesión (Thymeleaf) de la primera imagen, envolviendo el icono de la segunda -->
+                <a th:href="@{/login}" class="text-start opacity-75">
+                    <i class="bi bi-box-arrow-right fs-5 cursor-pointer"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="bi bi-search text-muted position-absolute mt-2 ms-2"></i>
+                    <input type="text" placeholder="Buscar candidatos o vacantes... (Cmd+K)" class="ps-5">
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light btn-sm fw-bold border"><i class="bi bi-building me-1"></i> Canvia
+                        Cloud</button>
+                    <button class="btn btn-primary btn-sm fw-bold"><i class="bi bi-plus-lg me-1"></i> Crear
+                        Vacante</button>
+                    <i class="bi bi-bell fs-5 text-muted"></i>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <span class="text-primary small fw-bold text-uppercase">Canvia ATS / Talento Tecnológico /
+                            Reclutamiento Activo</span>
+                        <h2 class="fw-bold text-dark mb-1">Gestión de Vacantes y Pipeline TI</h2>
+                        <p class="text-muted small mb-0">Supervisa el rendimiento del embudo de contratación
+                            tecnológica, candidatos escaneados con IA y vacantes activas.</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-secondary bg-white"><i class="bi bi-sliders me-2"></i>Filtros
+                            Avanzados</button>
+                        <button class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Nueva Vacante</button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="bi bi-briefcase stat-icon"></i>
+                        <div class="text-muted small fw-bold">Vacantes Activas</div>
+                        <div class="stat-value" th:text="${totalVacantes}">12</div>
+                        <div class="text-success small fw-bold"><i class="bi bi-arrow-up-right"></i> +2 esta semana
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="bi bi-people stat-icon" style="color: #0ea5e9;"></i>
+                        <div class="text-muted small fw-bold">Total Postulaciones</div>
+                        <div class="stat-value" th:text="${totalPostulaciones}">348</div>
+                        <div class="text-success small fw-bold"><i class="bi bi-arrow-up-right"></i> +18% vs mes ant.
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="bi bi-upc-scan stat-icon" style="color: #6366f1;"></i>
+                        <div class="text-muted small fw-bold">Procesados con Escáner ATS</div>
+                        <div class="d-flex align-items-baseline">
+                            <div class="stat-value me-2" th:text="${procesadosATS}">312</div>
+                            <span class="text-muted small">/ <span th:text="${totalPostulaciones}"></span> Total</span>
+                        </div>
+                        <div class="text-primary small fw-bold"><i class="bi bi-lightning-charge-fill"></i> 92%
+                            Efectividad Match</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="bi bi-calendar-event stat-icon" style="color: #f59e0b;"></i>
+                        <div class="text-muted small fw-bold">Entrevistas Técnicas</div>
+                        <div class="stat-value">24 <span class="fs-6 text-muted fw-normal">Agendadas</span></div>
+                        <div class="text-muted small">8 para hoy y mañana <a href="#"
+                                class="float-end text-decoration-none">Calendario →</a></div>
+                    </div>
+                </div>
+
+                <!-- Main Content & Right Panel -->
+                <div class="content-grid">
+                    <!-- Columna Izquierda: Tabla de Vacantes -->
+                    <div>
+                        <div class="d-flex gap-3 mb-3">
+                            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill">Todas (12)</span>
+                            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill"><span
+                                    class="text-danger">•</span> Urgentes (4)</span>
+                            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill"><span
+                                    class="text-primary">•</span> En Evaluación ATS (5)</span>
+                        </div>
+
+                        <div class="table-card p-0">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light text-muted small">
+                                    <tr>
+                                        <th class="ps-4">PUESTO / ESPECIALIDAD</th>
+                                        <th>MODALIDAD & SEDE</th>
+                                        <th>POSTULACIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="vacante : ${vacantes}">
+                                        <td class="ps-4 py-3">
+                                            <div class="fw-bold text-dark fs-6 d-flex align-items-center gap-2">
+                                                <span th:text="${vacante.titulo}">Senior Java</span>
+                                                <span class="badge badge-urgente rounded-pill">URGENTE</span>
+                                            </div>
+                                            <div class="text-muted small mt-1">
+                                                ID: CNV-[[${vacante.idVacante}]]98 <span class="mx-1">•</span>
+                                                [[${vacante.area}]]
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold text-dark small"><i class="bi bi-laptop me-1"></i>
+                                                [[${vacante.modalidad}]]</div>
+                                            <div class="text-muted small">Hub Perú / LatAm</div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="avatar-group ms-3">
+                                                    <div class="avatar" style="background:#3b82f6;">LR</div>
+                                                    <div class="avatar" style="background:#10b981;">AQ</div>
+                                                    <div class="avatar" style="background:#f59e0b;">MS</div>
+                                                </div>
+                                                <span class="fw-bold">82</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Columna Derecha: Paneles IA -->
+                    <div>
+                        <!-- Top Match AI -->
+                        <div class="side-card">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-stars text-primary me-2"></i>Motor ATS • Top
+                                    Match</h6>
+                                <span class="badge bg-primary-subtle text-primary">Score > 90%</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.8rem;">Perfiles con correspondencia excepcional
+                                detectados en las últimas 3 horas.</p>
+
+                            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar ms-0 me-3" style="background:#2563eb; width:35px; height:35px;">
+                                        EA</div>
+                                    <div>
+                                        <div class="fw-bold small">Eduardo Albarracín</div>
+                                        <div class="text-muted" style="font-size: 0.75rem;">Senior Java Backend</div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-primary fs-5 lh-1">96%</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">Match IA</div>
+                                </div>
+                            </div>
+                            <a href="#" class="text-primary text-decoration-none small fw-bold">Ver Scorecard <i
+                                    class="bi bi-box-arrow-up-right ms-1"></i></a>
+                        </div>
+
+                        <!-- Escaneo Masivo (Widget Oscuro) -->
+                        <div class="side-card bg-dark text-white border-0">
+                            <h6 class="fw-bold mb-2"><i class="bi bi-cpu me-2"></i> CANVIA NEURAL MATCHING</h6>
+                            <h5 class="fw-bold">Escaneo Masivo Nocturno</h5>
+                            <p class="text-white-50" style="font-size: 0.8rem;">38 postulaciones sin clasificar
+                                programadas para análisis semántico a las 23:00.</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <button class="btn btn-primary btn-sm fw-bold px-3">Ejecutar Ahora</button>
+                                <span class="small text-white-50">Tiempo est: 2m</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
