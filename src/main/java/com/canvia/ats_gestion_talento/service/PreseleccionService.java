@@ -1,7 +1,7 @@
 package com.canvia.ats_gestion_talento.service;
 
 import com.canvia.ats_gestion_talento.entity.*;
-import com.canvia.ats_gestion_talento.repository.*;
+import com.canvia.ats_gestion_talento.dao.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PreseleccionService {
 
-    private final PostulacionRepository postulacionRepository;
-    private final CriterioVacanteRepository criterioRepository;
-    private final EvaluacionPreseleccionRepository evaluacionRepository;
-    private final DetalleEvaluacionRepository detalleRepository;
-    private final EstadoPostulacionRepository estadoRepository;
-    private final HistorialEstadoPostulacionRepository historialRepository;
+    private final PostulacionDAO postulacionRepository;
+    private final CriterioVacanteDAO criterioRepository;
+    private final EvaluacionPreseleccionDAO evaluacionRepository;
+    private final DetalleEvaluacionDAO detalleRepository;
+    private final EstadoPostulacionDAO estadoRepository;
+    private final HistorialEstadoPostulacionDAO historialRepository;
     
     private final PdfService pdfService;
 

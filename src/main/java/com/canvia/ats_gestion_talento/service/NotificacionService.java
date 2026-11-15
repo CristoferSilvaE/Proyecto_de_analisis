@@ -3,17 +3,19 @@ package com.canvia.ats_gestion_talento.service;
 import com.canvia.ats_gestion_talento.entity.Notificacion;
 import com.canvia.ats_gestion_talento.entity.Postulacion;
 import com.canvia.ats_gestion_talento.entity.Usuario;
-import com.canvia.ats_gestion_talento.repository.NotificacionRepository;
+import com.canvia.ats_gestion_talento.dao.NotificacionDAO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class NotificacionService {
 
-    private final NotificacionRepository notificacionRepository;
+    private final NotificacionDAO notificacionRepository;
     private final CorreoService correoService;
 
+    @Transactional
     public void registrarYEnviarNotificacion(Usuario usuario, Postulacion postulacion, String tipo, String asunto, String mensaje) {
         
         // 1. Crear el registro en BD
