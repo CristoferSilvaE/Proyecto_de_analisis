@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Entrevistas Técnicas | Canvia ATS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* =========================================
+           ESTILOS BASE - MÓDULOS DEL RECLUTADOR
+           (mismos que reclutador/vacantes.html)
+           ========================================= */
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #1a2235;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+            flex-grow: 1;
+        }
+
+        .menu-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #6b7280;
+            letter-spacing: 1px;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: #2563eb;
+            color: white;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-info-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border: 2px solid white;
+            margin-left: -10px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            background: white;
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        .action-btn {
+            color: #6b7280;
+            background: transparent;
+            border: none;
+            padding: 0.4rem;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #f3f4f6;
+            color: #2563eb;
+        }
+
+        /* Estilos específicos de esta vista */
+        .estado-badge {
+            font-size: 0.75rem;
+        }
+
+        .modal-header {
+            background-color: #1a2235;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- SIDEBAR FIJO UNIFICADO -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h4 class="mb-0 fs-5 fw-bold"><span
+                        class="bg-primary text-white rounded px-2 py-1 me-2 d-inline-block">C</span> Canvia ATS</h4>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-title">Operaciones TI</div>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+                <a th:href="@{/reclutador/vacantes}" class="menu-item"><i class="bi bi-briefcase"></i> Vacantes
+                    Activas</a>
+                <a th:href="@{/reclutador/candidatos}" class="menu-item"><i class="bi bi-people"></i> Base de
+                    Candidatos</a>
+                <a th:href="@{/reclutador/escaner}" class="menu-item"><i class="bi bi-upc-scan"></i> Escáner ATS &
+                    Scoring</a>
+                <a th:href="@{/reclutador/entrevistas}" class="menu-item active"><i class="bi bi-camera-video"></i>
+                    Entrevistas Técnicas</a>
+                <a th:href="@{/reclutador/dashboard}" class="menu-item"><i class="bi bi-sliders"></i> Configuración</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-info-group">
+                    <div class="avatar ms-0 me-2" style="background:#4f46e5;">MR</div>
+                    <div>
+                        <div class="fw-bold lh-1 text-white" style="font-size: 0.95rem;">Mariana Rios</div>
+                        <div class="text-light opacity-75" style="font-size:0.75rem;">Sr Tech Recruiter</div>
+                    </div>
+                </div>
+                <a th:href="@{/login}" class="text-primary text-decoration-none">
+                    <i class="bi bi-box-arrow-right fs-5 cursor-pointer" title="Cerrar Sesión"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="topbar">
+                <h5 class="mb-0 fw-bold">Entrevistas y Selección</h5>
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-bell fs-5 text-muted"></i>
+                </div>
+            </header>
+
+            <div class="p-4">
+                <!-- Mensajes del sistema -->
+                <div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i><span th:text="${exito}">Operación exitosa</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${error}">Error</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Gestión de Entrevistas</h2>
+                    <p class="text-muted small mb-0">Programa entrevistas para los candidatos preseleccionados,
+                        registra el resultado final y notifica automáticamente al postulante.</p>
+                </div>
+
+                <!-- ===================== CANDIDATOS EN PROCESO ===================== -->
+                <div class="content-card mb-4">
+                    <div class="table-toolbar">
+                        <div>
+                            <h6 class="fw-bold mb-0"><i class="bi bi-person-check me-2 text-primary"></i>Candidatos en
+                                proceso</h6>
+                            <small class="text-muted">Preseleccionados por el ATS o con entrevistas en curso</small>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3"
+                            th:text="${#lists.size(postulaciones)} + ' candidatos'">0 candidatos</span>
+                    </div>
+
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small">
+                            <tr>
+                                <th class="ps-4 py-3">CANDIDATO</th>
+                                <th>VACANTE</th>
+                                <th>ESTADO</th>
+                                <th class="text-end pe-4">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="postulacion : ${postulaciones}">
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark"
+                                        th:text="${postulacion.candidato.nombres + ' ' + postulacion.candidato.apellidos}">
+                                        Nombre Candidato</div>
+                                    <div class="text-muted small" th:text="${postulacion.candidato.correo}">correo</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark small" th:text="${postulacion.vacante.titulo}">Vacante
+                                    </div>
+                                    <div class="text-muted small font-monospace">
+                                        POST-[[${postulacion.idPostulacion}]]</div>
+                                </td>
+                                <td>
+                                    <span class="badge estado-badge px-3 py-2 rounded-pill"
+                                        th:classappend="${postulacion.estado.nombre == 'EN_ENTREVISTA'} ? 'bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25' : 'bg-success bg-opacity-10 text-success border border-success border-opacity-25'"
+                                        th:text="${postulacion.estado.nombre}">ESTADO</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <button type="button" class="btn btn-primary btn-sm fw-bold me-1"
+                                        data-bs-toggle="modal" data-bs-target="#modalProgramar"
+                                        th:data-id="${postulacion.idPostulacion}"
+                                        th:data-candidato="${postulacion.candidato.nombres + ' ' + postulacion.candidato.apellidos}"
+                                        th:data-vacante="${postulacion.vacante.titulo}">
+                                        <i class="bi bi-calendar-plus me-1"></i>Programar
+                                    </button>
+                                    <button type="button" class="btn btn-outline-dark btn-sm fw-bold"
+                                        data-bs-toggle="modal" data-bs-target="#modalResultado"
+                                        th:data-id="${postulacion.idPostulacion}"
+                                        th:data-candidato="${postulacion.candidato.nombres + ' ' + postulacion.candidato.apellidos}"
+                                        th:data-vacante="${postulacion.vacante.titulo}">
+                                        <i class="bi bi-clipboard-check me-1"></i>Resultado
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(postulaciones)}">
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-person-x fs-1 d-block mb-2"></i> No hay candidatos preseleccionados
+                                    por el momento. Ejecuta el Escáner ATS para evaluar nuevas postulaciones.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ===================== AGENDA DE ENTREVISTAS ===================== -->
+                <div class="content-card">
+                    <div class="table-toolbar">
+                        <div>
+                            <h6 class="fw-bold mb-0"><i class="bi bi-calendar-week me-2 text-primary"></i>Agenda de
+                                entrevistas</h6>
+                            <small class="text-muted">Ordenadas por fecha</small>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3"
+                            th:text="${#lists.size(entrevistas)} + ' entrevistas'">0 entrevistas</span>
+                    </div>
+
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-muted small">
+                            <tr>
+                                <th class="ps-4 py-3">FECHA Y HORA</th>
+                                <th>CANDIDATO / VACANTE</th>
+                                <th>TIPO & MODALIDAD</th>
+                                <th>ESTADO</th>
+                                <th class="text-end pe-4">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entrevista : ${entrevistas}"
+                                th:with="activa=${entrevista.estado == 'PROGRAMADA' or entrevista.estado == 'REPROGRAMADA'}">
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark"
+                                        th:text="${#temporals.format(entrevista.fechaHora, 'dd/MM/yyyy')}">01/01/2026
+                                    </div>
+                                    <div class="text-muted small"><i class="bi bi-clock me-1"></i>
+                                        [[${#temporals.format(entrevista.fechaHora, 'HH:mm')}]]</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark small"
+                                        th:text="${entrevista.postulacion.candidato.nombres + ' ' + entrevista.postulacion.candidato.apellidos}">
+                                        Candidato</div>
+                                    <div class="text-muted small" th:text="${entrevista.postulacion.vacante.titulo}">
+                                        Vacante</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark small" th:text="${entrevista.tipo}">TIPO</div>
+                                    <div class="text-muted small">
+                                        <i class="bi"
+                                            th:classappend="${entrevista.modalidad == 'VIRTUAL'} ? 'bi-camera-video' : 'bi-building'"></i>
+                                        [[${entrevista.modalidad}]]
+                                        <a th:if="${entrevista.enlaceReunion != null}" th:href="${entrevista.enlaceReunion}"
+                                            target="_blank" rel="noopener" class="ms-1 text-decoration-none">
+                                            <i class="bi bi-box-arrow-up-right"></i> Enlace</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge estado-badge px-3 py-2 rounded-pill" th:text="${entrevista.estado}"
+                                        th:classappend="${entrevista.estado == 'REALIZADA'} ? 'bg-success bg-opacity-10 text-success border border-success border-opacity-25'
+                                            : (${entrevista.estado == 'CANCELADA'} ? 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25'
+                                            : 'bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25')">ESTADO</span>
+                                    <div class="text-muted small mt-1 text-truncate" style="max-width: 220px;"
+                                        th:if="${entrevista.observaciones != null}" th:text="${entrevista.observaciones}"
+                                        th:title="${entrevista.observaciones}">obs</div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <th:block th:if="${activa}">
+                                        <button type="button" class="action-btn" title="Reprogramar"
+                                            data-bs-toggle="modal" data-bs-target="#modalReprogramar"
+                                            th:data-id="${entrevista.idEntrevista}"
+                                            th:data-enlace="${entrevista.enlaceReunion}">
+                                            <i class="bi bi-calendar-event"></i></button>
+                                        <button type="button" class="action-btn text-success" title="Marcar como realizada"
+                                            data-bs-toggle="modal" data-bs-target="#modalRealizada"
+                                            th:data-id="${entrevista.idEntrevista}">
+                                            <i class="bi bi-check2-circle"></i></button>
+                                        <form th:action="@{/reclutador/entrevistas/{id}/cancelar(id=${entrevista.idEntrevista})}"
+                                            method="post" class="d-inline"
+                                            onsubmit="return confirm('¿Cancelar esta entrevista?');">
+                                            <button type="submit" class="action-btn text-danger" title="Cancelar">
+                                                <i class="bi bi-x-circle"></i></button>
+                                        </form>
+                                    </th:block>
+                                    <span th:unless="${activa}" class="text-muted small">—</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(entrevistas)}">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-calendar-x fs-1 d-block mb-2"></i> Aún no hay entrevistas
+                                    programadas.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===================== MODAL: PROGRAMAR ENTREVISTA (CU07) ===================== -->
+    <div class="modal fade" id="modalProgramar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-calendar-plus me-2"></i>Programar entrevista</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action="@{/reclutador/entrevistas/programar}" th:object="${entrevistaDto}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="idPostulacion" class="js-id">
+                        <p class="small text-muted mb-3">
+                            <span class="fw-bold text-dark js-candidato"></span> —
+                            <span class="js-vacante"></span>
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Fecha y hora *</label>
+                                <input type="datetime-local" name="fechaHora" class="form-control js-fecha" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Tipo *</label>
+                                <select name="tipo" class="form-select" required>
+                                    <option value="GENERAL">General</option>
+                                    <option value="RRHH">Recursos Humanos</option>
+                                    <option value="TECNICA" selected>Técnica</option>
+                                    <option value="FINAL">Final</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Modalidad *</label>
+                                <select name="modalidad" class="form-select js-modalidad" required>
+                                    <option value="VIRTUAL">Virtual</option>
+                                    <option value="PRESENCIAL">Presencial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Enlace de reunión <span
+                                        class="js-enlace-req">*</span></label>
+                                <input type="url" name="enlaceReunion" class="form-control js-enlace"
+                                    placeholder="https://teams.microsoft.com/..." maxlength="500">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Observaciones</label>
+                                <textarea name="observaciones" class="form-control" rows="2"
+                                    placeholder="Temas a evaluar, entrevistadores, sala..."></textarea>
+                            </div>
+                        </div>
+                        <div class="alert alert-info small mt-3 mb-0">
+                            <i class="bi bi-envelope me-1"></i> Al confirmar se enviará un correo al candidato con los
+                            datos de la entrevista.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Confirmar programación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: REGISTRAR RESULTADO (CU08) ===================== -->
+    <div class="modal fade" id="modalResultado" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-clipboard-check me-2"></i>Registrar resultado</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action="@{/reclutador/entrevistas/resultado}" th:object="${resultadoDto}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="idPostulacion" class="js-id">
+                        <p class="small text-muted mb-3">
+                            <span class="fw-bold text-dark js-candidato"></span> —
+                            <span class="js-vacante"></span>
+                        </p>
+                        <label class="form-label small fw-bold">Resultado *</label>
+                        <div class="d-flex flex-column gap-2 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="resultado" id="resSel"
+                                    value="SELECCIONADO" required>
+                                <label class="form-check-label" for="resSel"><span
+                                        class="fw-bold text-success">Seleccionado</span> — se notifica la
+                                    felicitación</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="resultado" id="resNoSel"
+                                    value="NO_SELECCIONADO">
+                                <label class="form-check-label" for="resNoSel"><span class="fw-bold text-danger">No
+                                        seleccionado</span> — se notifica el agradecimiento</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="resultado" id="resPend"
+                                    value="PENDIENTE">
+                                <label class="form-check-label" for="resPend"><span
+                                        class="fw-bold text-secondary">Pendiente</span> — requiere evaluación
+                                    adicional (no se notifica)</label>
+                            </div>
+                        </div>
+                        <label class="form-label small fw-bold">Observaciones</label>
+                        <textarea name="observaciones" class="form-control" rows="3"
+                            placeholder="Fundamento de la decisión, feedback para el candidato..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark fw-bold">Registrar resultado</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: REPROGRAMAR ===================== -->
+    <div class="modal fade" id="modalReprogramar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-calendar-event me-2"></i>Reprogramar entrevista</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" class="js-form-accion" th:attr="data-base=@{/reclutador/entrevistas/}"
+                    data-accion="reprogramar">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Nueva fecha y hora *</label>
+                            <input type="datetime-local" name="fechaHora" class="form-control js-fecha" required>
+                        </div>
+                        <label class="form-label small fw-bold">Enlace de reunión</label>
+                        <input type="url" name="enlaceReunion" class="form-control js-enlace" maxlength="500"
+                            placeholder="Déjalo vacío para mantener el actual">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Reprogramar y notificar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: MARCAR REALIZADA ===================== -->
+    <div class="modal fade" id="modalRealizada" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-check2-circle me-2"></i>Entrevista realizada</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" class="js-form-accion" th:attr="data-base=@{/reclutador/entrevistas/}"
+                    data-accion="realizada">
+                    <div class="modal-body">
+                        <label class="form-label small fw-bold">Notas de la entrevista</label>
+                        <textarea name="observaciones" class="form-control" rows="4"
+                            placeholder="Desempeño técnico, habilidades blandas, recomendación..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success fw-bold">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fecha mínima = ahora (formato yyyy-MM-ddTHH:mm en hora local)
+        function ahoraLocal() {
+            const d = new Date();
+            d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+            return d.toISOString().slice(0, 16);
+        }
+
+        // Rellena cada modal con los datos del botón que lo abrió
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('show.bs.modal', event => {
+                const boton = event.relatedTarget;
+                if (!boton) return;
+                const id = boton.dataset.id;
+
+                modal.querySelectorAll('.js-id').forEach(el => el.value = id);
+                modal.querySelectorAll('.js-candidato').forEach(el => el.textContent = boton.dataset.candidato || '');
+                modal.querySelectorAll('.js-vacante').forEach(el => el.textContent = boton.dataset.vacante || '');
+                modal.querySelectorAll('.js-fecha').forEach(el => { el.min = ahoraLocal(); el.value = ''; });
+                modal.querySelectorAll('.js-enlace').forEach(el => el.value = boton.dataset.enlace || '');
+
+                const form = modal.querySelector('.js-form-accion');
+                if (form) {
+                    form.action = form.dataset.base + id + '/' + form.dataset.accion;
+                }
+            });
+        });
+
+        // El enlace es obligatorio solo si la entrevista es virtual
+        const modalidad = document.querySelector('#modalProgramar .js-modalidad');
+        const enlace = document.querySelector('#modalProgramar .js-enlace');
+        const marcaReq = document.querySelector('#modalProgramar .js-enlace-req');
+        function actualizarEnlace() {
+            const virtual = modalidad.value === 'VIRTUAL';
+            enlace.required = virtual;
+            marcaReq.style.display = virtual ? '' : 'none';
+        }
+        modalidad.addEventListener('change', actualizarEnlace);
+        actualizarEnlace();
+    </script>
+</body>
+
+</html>
