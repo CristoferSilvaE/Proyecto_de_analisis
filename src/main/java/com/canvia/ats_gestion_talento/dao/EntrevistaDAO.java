@@ -18,4 +18,15 @@ public class EntrevistaDAO extends BaseDAO<Entrevista> {
         .setParameter("id", idPostulacion)
         .getResultList();
   }
+
+  // Listado para el panel de entrevistas, con candidato y vacante ya cargados para Thymeleaf.
+  public List<Entrevista> findAllConDetalle() {
+    return entityManager
+        .createQuery(
+            "SELECT e FROM Entrevista e JOIN FETCH e.postulacion p "
+                + "JOIN FETCH p.candidato JOIN FETCH p.vacante JOIN FETCH p.estado "
+                + "ORDER BY e.fechaHora ASC",
+            Entrevista.class)
+        .getResultList();
+  }
 }
