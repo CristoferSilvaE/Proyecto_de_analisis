@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Configuración local y credenciales
+src/main/resources/application-dev.yml
+
+# Archivos locales sensibles
+.env
+.env.*
